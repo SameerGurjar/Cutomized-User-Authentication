@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+
+
+
+{% block style %}
+<style>
+
+    table, tr, td, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+</style>
+{% endblock style %}
+
+{% block content %}
+
+{% if fields %}
+<br>
+{% else %}
+<h3>No details</h3>
+{% endif %}
+
+<table>
+    <tr>
+        {% for f in fields %}
+            <th>{{ f.name }}</th>
+        {% endfor %}
+    </tr>
+    {% for v in obj_list %}
+    <tr>
+        {% for l in v.values %}
+
+            <td>{{ l }}</td>
+
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}

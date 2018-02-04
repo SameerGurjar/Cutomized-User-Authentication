@@ -1,0 +1,7 @@
+<a href="{% url 'home' %}" class="btn btn-default">Home</a>
+{% if user.is_authticated %}
+<a href="{% url 'logout' %}" class="btn btn-default">LogOut</a>
+{% else %}
+<a href="{% url 'login' %}" class="btn btn-default">Login</a>
+<a href="{% url 'register' %}" class="btn btn-default">Register</a>
+{% endif %}

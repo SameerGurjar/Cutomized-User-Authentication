@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}}
+
+
+
+{% block javascript %}
+  <script>
+    $(document).ready(function(){
+     $("#id_button").click(function () {
+      var number_or_email = $("#id_number_or_email").val();
+      $.ajax({
+        type:'GET',
+        url: '/ajax/get_otp/',
+        data: {
+          'number_or_email': number_or_email
+        },
+        dataType: 'json',
+        success: function (data) {
+         var message = data.message;
+         $("#id_message").text(message);
+        }
+      });
+    });
+   });
+  </script>
+
+{% endblock javascript %}
+
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+{% include "messages_display.html" %}
+<h1>{{ title }}</h1>
+<hr/>
+
+<form method='POST' action='{url "detail"}' enctype='multipart/form-data'>{% csrf_token %}
+{{ form|crispy }}
+    <input type="button" id="id_button" value="GET OTP"><br/>
+
+         {% if session_token_error %}
+        <span>{{ session_token_error }}</span>
+        {% endif %}
+
+<br/>
+<input type='submit' class='btn btn-default' value='{{ title }}' />
+</form>
+<h3 id="id_message"></h3>
+{% if error %}
+<h3>{{ error }}</h3>
+{% endif %}
+</div>
+{% endblock content %}

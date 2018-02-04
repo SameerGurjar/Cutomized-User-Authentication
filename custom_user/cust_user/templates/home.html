@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li:hover {
+        background-color: blue;
+        color: white;
+    }
+
+    #suggestion-box {
+        width: 200px;
+        border: 1px solid black;
+    }
+
+    #search-box {
+        width: 200px;
+    }
+
+
+</style>
+{% endblock style %}
+
+
+{% block javascript %}
+  <script>
+
+   $(document).ready(function(){
+
+   var container = $("#suggestion-box");
+
+   $("body").mouseup(function(e){
+        if(!container.is(e.target) && container.has(e.target).length===0){
+            container.hide();
+        }
+   });
+
+	$("#search-box").keyup(function(){
+		$.ajax({
+		type: "GET",
+		url: "ajax/auto_suggest/",
+		data: {
+          'keyword': $(this).val()
+        },
+		success: function(data){
+			$("#suggestion-box").show();
+			$("#suggestion-box").html(data);
+		}
+		});
+	});
+    });
+
+    function selectKeyword(val) {
+    $("#search-box").val(val);
+    $("#suggestion-box").hide();
+    }
+  </script>
+
+{% endblock javascript %}
+
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+{% if request.user.is_authenticated %}
+<h1>Welcome {{ request.user.get_full_name }}</h1>
+{% else %}
+<h1>Welcome Anonymous User</h1>
+{% endif %}
+
+
+
+
+<form method="GET" action="{% url 'details' %}">
+
+<input type="search" id="search-box" name="search" placeholder="Type..." />
+    <input type="submit" value="Search" class="btn btn-success">
+    <div id="suggestion-box"></div>
+</form>
+</div>
+{% endblock content %}
